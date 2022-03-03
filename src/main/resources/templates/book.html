@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Address Book</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<script>
+    $(document).ready(function() {
+        $(".books").show();
+        let id = window.location.pathname.split("/").pop()
+        $.ajax({
+            url: "/getBook/" + id,
+            method: "GET"
+        }).then(function (data){
+            $(".buddies").text(JSON.stringify(data.buddies));
+        })
+        $(".createBuddy").click(function(){
+
+            $.ajax({
+                url: "/addBuddy/" + id,
+                method: "POST",
+                data: JSON.stringify({
+                    name: $(".name").val(),
+                    number: $(".number").val()
+                }),
+                contentType: 'application/json'
+
+            }).then(function(data) {
+                $(".buddies").text(JSON.stringify(data.buddies));
+            })
+        })
+
+    })
+</script>
+<noscript>
+    <h1 th:text= "'Address Book: ' + ${id}"/>
+    <p th:text="${buddies}"/>
+    <h1>Buddy Creation Station</h1>
+    <form action="#" th:action="@{'/addressBook/' + ${id}}" th:object="${buddyinfo}" method="post">
+        <p>Name: <input type="text" th:field="*{name}"/></p>
+        <p>Name: <input type="text" th:field="*{number}"/></p>
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" />
+
+    </form>
+</noscript>
+<div class="books" style="display: none">
+    <p class="buddies"></p>
+    <p>Name: <input class="name"/></p>
+    <p>Number: <input class="number"/></p>
+    <button class="createBuddy">
+        Create Buddy Info
+    </button>
+
+</div>
+</body>
+</html>

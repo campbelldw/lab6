@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+
+    <script>
+        $(document).ready(function() {
+            $(".main").show();
+            $(".createBook").click(function(){
+                $.ajax({
+                    url: "/addressBook",
+                    method: "POST"
+                }).then(function(data) {
+                    alert("Address book with id " + data.id);
+                    window.location.href = "/addressBook/" + data.id;
+                })
+            })
+
+        })
+    </script>
+    <noscript>
+        <h1>Lab 5</h1>
+        <form action="#" th:action="@{/main}" th:object="${addressbook}" method="post">
+            <p><input type="submit" value="Create Book" />
+
+        </form>
+    </noscript>
+    <div class="main" style="display: none">
+        <button class="createBook">
+            Create Address Book
+        </button>
+
+    </div>
+
+</body>
+</html>
